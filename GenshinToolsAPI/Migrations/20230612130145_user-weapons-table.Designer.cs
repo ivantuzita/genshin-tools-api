@@ -2,6 +2,7 @@
 using GenshinToolsAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,9 +10,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GenshinToolsAPI.Migrations
 {
     [DbContext(typeof(GenshinContext))]
-    partial class GenshinContextModelSnapshot : ModelSnapshot
+    [Migration("20230612130145_user-weapons-table")]
+    partial class userweaponstable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -76,17 +79,6 @@ namespace GenshinToolsAPI.Migrations
                         .HasColumnType("int");
 
                     b.ToTable("UserCharacters");
-                });
-
-            modelBuilder.Entity("GenshinToolsAPI.Models.UserWeapons", b =>
-                {
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("WeaponId")
-                        .HasColumnType("int");
-
-                    b.ToTable("UserWeapons");
                 });
 
             modelBuilder.Entity("GenshinToolsAPI.Models.Weapon", b =>

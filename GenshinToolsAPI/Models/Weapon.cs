@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 namespace GenshinToolsAPI.Models {
-    public class Item {
+    public class Weapon {
 
         [Key]
         [Required]

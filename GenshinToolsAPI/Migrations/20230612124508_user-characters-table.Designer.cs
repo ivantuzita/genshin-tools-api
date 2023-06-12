@@ -2,6 +2,7 @@
 using GenshinToolsAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,9 +10,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GenshinToolsAPI.Migrations
 {
     [DbContext(typeof(GenshinContext))]
-    partial class GenshinContextModelSnapshot : ModelSnapshot
+    [Migration("20230612124508_user-characters-table")]
+    partial class usercharacterstable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,6 +51,25 @@ namespace GenshinToolsAPI.Migrations
                     b.ToTable("DaysOfWeek");
                 });
 
+            modelBuilder.Entity("GenshinToolsAPI.Models.Item", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("PictureURL")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Items");
+                });
+
             modelBuilder.Entity("GenshinToolsAPI.Models.User", b =>
                 {
                     b.Property<int>("Id")
@@ -76,36 +98,6 @@ namespace GenshinToolsAPI.Migrations
                         .HasColumnType("int");
 
                     b.ToTable("UserCharacters");
-                });
-
-            modelBuilder.Entity("GenshinToolsAPI.Models.UserWeapons", b =>
-                {
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("WeaponId")
-                        .HasColumnType("int");
-
-                    b.ToTable("UserWeapons");
-                });
-
-            modelBuilder.Entity("GenshinToolsAPI.Models.Weapon", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("PictureURL")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Weapons");
                 });
 #pragma warning restore 612, 618
         }

@@ -2,6 +2,7 @@
 using GenshinToolsAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,9 +10,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GenshinToolsAPI.Migrations
 {
     [DbContext(typeof(GenshinContext))]
-    partial class GenshinContextModelSnapshot : ModelSnapshot
+    [Migration("20230612130421_user-weapons-table-fix")]
+    partial class userweaponstablefix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
