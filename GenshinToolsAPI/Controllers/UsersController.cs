@@ -1,13 +1,7 @@
 ﻿using GenshinToolsAPI.Data;
 using GenshinToolsAPI.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
 
 namespace GenshinToolsAPI.Controllers {
     [Route("api/[controller]")]
@@ -36,7 +30,9 @@ namespace GenshinToolsAPI.Controllers {
             //returs 200
             return Ok(new {
                 Status = 200,
-                Message = "Login Success!"
+                Message = "Login Success!",
+                UserId = user.Id,
+                Username = user.Username
             });
         }
 
@@ -55,7 +51,6 @@ namespace GenshinToolsAPI.Controllers {
             });
 
         }
-
 
     }
 }
