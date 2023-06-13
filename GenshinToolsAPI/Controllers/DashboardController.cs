@@ -1,11 +1,9 @@
 ﻿using GenshinToolsAPI.Data;
-using GenshinToolsAPI.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using GenshinToolsAPI.Models;
 
 namespace GenshinToolsAPI.Controllers {
-    [Route("api/[controller]")]
+    [Route("api/dashboard")]
     [ApiController]
     public class DashboardController : ControllerBase {
 
@@ -15,6 +13,18 @@ namespace GenshinToolsAPI.Controllers {
             _dbContext = dbContext;
         }
 
+        //gets all characters
+        [HttpGet("characters")]
+        public ICollection<Character> getCharacters() {
+            return _dbContext.Characters.ToList();
+        }
+
+        //gets all weapons
+        [HttpGet("weapons")]
+        public ICollection<Weapon> getWeapons() {
+            return _dbContext.Weapons.ToList();
+        }
+
         [HttpGet("characters/{id}")]
         public IActionResult getUserCharactersById(int id) {
             var user = _dbContext.Users.FirstOrDefault(user => user.Id == id);
@@ -22,14 +32,10 @@ namespace GenshinToolsAPI.Controllers {
                 //returns 404
                 return NotFound(new { Message = "User not found." });
             }
-            //gets a list of characterid's using the user id as reference
-            List<Character> characters = new List<Character>();
-            IEnumerable<int> userCharacters = _dbContext.UserCharacters.Where(x => x.UserId == id)
+            IEnumerable<int> userCharIds = _dbContext.UserCharacters.Where(x => x.UserId == id)
                 .Select(c => c.CharacterId).ToList();
-            foreach (var character in userCharacters) {
-                characters.Add(_dbContext.Characters.FirstOrDefault(x => x.Id == character));
-            }
-            return Ok(characters);
+
+            return Ok(userCharactersFiltered(userCharIds));
         }
 
         [HttpGet("weapons/{id}")]
@@ -39,10 +45,39 @@ namespace GenshinToolsAPI.Controllers {
                 //returns 404
                 return NotFound(new { Message = "User not found." });
             }
-            //gets a list of characterid's using the user id as reference
-            IEnumerable<int> weapons = _dbContext.UserWeapons.Where(x => x.UserId == id)
+            IEnumerable<int> userWeaponsIds = _dbContext.UserWeapons.Where(x => x.UserId == id)
                 .Select(w => w.WeaponId).ToList();
-            return Ok(weapons);
+            //returns 200 with the list of weapons that can be upgraded today
+            return Ok(userWeaponsFiltered(userWeaponsIds));
         }
+
+        private List<Character> userCharactersFiltered(IEnumerable<int> userCharacters) {
+            IEnumerable<int> filteredChars = _dbContext.TalentWeekDays.Where(x => x.WeekDayId == dayOfWeek())
+                .Select(c => c.CharacterId).ToList();
+            IEnumerable<int> join = userCharacters.Intersect(filteredChars);
+            List<Character> chars = new List<Character>();
+
+            foreach (var characterId in join) {
+                chars.Add(_dbContext.Characters.FirstOrDefault(x => x.Id == characterId));
+            }
+            return chars;
+        }
+
+        private List<Weapon> userWeaponsFiltered(IEnumerable<int> userWeapons) {
+            IEnumerable<int> filteredWeapons = _dbContext.WeaponWeekDays.Where(x => x.WeekDayId == dayOfWeek())
+                .Select(c => c.WeaponId).ToList();
+            IEnumerable<int> join = userWeapons.Intersect(filteredWeapons);
+            List<Weapon> weapons = new List<Weapon>();
+
+            foreach (var weaponId in join) {
+                weapons.Add(_dbContext.Weapons.FirstOrDefault(x => x.Id == weaponId));
+            }
+            return weapons;
+        }
+
+        private int dayOfWeek() {
+            return ((int)DateTime.Now.DayOfWeek + 6) % 7;
+        }
+
     }
 }

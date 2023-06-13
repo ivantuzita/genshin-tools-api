@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace GenshinToolsAPI.Controllers {
-    [Route("api/[controller]")]
+    [Route("api/user")]
     [ApiController]
     public class UsersController : ControllerBase {
 

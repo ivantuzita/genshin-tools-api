@@ -1,15 +1,12 @@
-﻿
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
 namespace GenshinToolsAPI.Models {
     [Keyless]
-    public class DayOfTheWeek {
-
+    public class WeaponDayOfTheWeek {
         [Required]
-        public int CharacterId { get; set; }
+        public int WeaponId { get; set; }
         [Required]
         public int WeekDayId { get; set; }
-
     }
 }
